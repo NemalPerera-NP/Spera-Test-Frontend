@@ -1,7 +1,7 @@
 // In Login.js
 import React, { useState } from "react";
+import axios from 'axios'
 import { useNavigate, Link } from "react-router-dom";
-import "../styles/loginStyles.css";
 
 const Login_url = "http://localhost:8080/api/auth/login";
 
@@ -12,8 +12,18 @@ function Login() {
   const [loginError, setLoginError] = useState("");
 
   // Function to handle form submission
-  const handleSubmit = async (e) => {
-  };
+  async function submit(e) {
+    e.preventDefault();
+
+    try {
+      await axios.post(loginError,{
+        username,password
+      })
+    } catch (error) {
+      console.log(error)
+      
+    }
+  }
 
   return (
     <div className="Login_Container">
@@ -40,7 +50,7 @@ function Login() {
             required
           />
         </div>
-        <input type="submit" />
+        <input type="submit" onClick={submit} />
       </form>
       <br />
       <p>OR</p>
