@@ -1,13 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-
-function Home(){
-return(
+function Home() {
+  const location = useLocation();
+  return (
     <div className="homepage">
-        <h1>Hello {} and Wellcome to Crypto Mart</h1>
-
+      <h1>Hello and Wellcome to Crypto Mart</h1>
     </div>
-)
+  );
 }
-export default Home
+export default Home;
