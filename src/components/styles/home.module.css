@@ -1,6 +1,5 @@
 .homepage_container {
-    display: flex;
-    width: 100%;
+  width: 100%;
 	min-height: 100vh;
 	background-color: #f5f5f5;
 	display: flex;
@@ -8,31 +7,65 @@
 	justify-content: center;
 }
 
-.right_side_container{
-    flex: 60%; /* Takes up 60% of the flex container's width */
-    height: 100%; /* Full height */
-    background-color: #f0f0f0; /* Example background color */
-    /* Align content to the right side */
-    justify-content: flex-end;
-}
+
 .left_side_container {
-    flex: 40%; /* Takes up the remaining 40% of the flex container's width */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #3bb19b;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  
+
+
+  }
+  .right_side_container{
+    width: 900px;
+    height: 500px;
     display: flex;
-    flex-direction: column; /* Stack child divs vertically */
+    border-radius: 10px;
+    margin-right: 20px;
+    box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+      0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
   }
   .left_side_top, .left_side_bottom {
-    flex: 50%; /* Each takes up half of the .left_side_container */
-    display: flex;
-    align-items: center; /* Center content vertically */
-    justify-content: center; /* Center content horizontally */
   }
 
   .left_side_top{
-    background-color: #3bb19b;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .left_side_bottom {
-    background-color: #3bb19b;
 
   }
 .crypto_Id_List{}
+
+.white_btn{
+  border: none;
+	outline: none;
+	padding: 15px 0;
+	background-color: white;
+	border-radius: 20px;
+	width: 180px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+  margin: 10px;
+}
+.left_side_container h2{
+  margin-top: 0;
+	color: white;
+	font-size: 40px;
+	align-self: center;
+}
+
+input[type="checkbox"] {
+  outline: none;
+	border: none;
+	width: 100px;
+	padding: 15px;
+  margin: 5px;
+}

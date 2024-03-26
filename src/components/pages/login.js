@@ -23,7 +23,7 @@ function Login() {
 
       const response = await axios.post(Login_url, { username, password });
 
-      // Assuming Axios does not throw for non-2xx responses
+      
       if (response.status === 401) {
         // unauthorized
         console.log("Unauthorized:", response.data.message);
@@ -45,7 +45,7 @@ function Login() {
       }
     } catch (error) {
       if (error.response) {
-        // that falls out of the range of 2xx
+        
         console.log("error.response.data......", error.response.data);
         console.log("error.response.status.......", error.response.status);
         console.log("error.response.headers.......", error.response.headers);

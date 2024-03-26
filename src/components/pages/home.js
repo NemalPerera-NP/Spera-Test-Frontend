@@ -56,14 +56,12 @@ function Home() {
     console.log("checkbox selected", id);
     setSelectedCryptoIds((currentSelectedIds) => {
       if (currentSelectedIds.includes(id)) {
-        // If it is already selected, remove it from the array
         const updatedSelectedIds = currentSelectedIds.filter(
           (cryptoId) => cryptoId !== id
         );
         console.log("selectedCryptoIds after removal:", updatedSelectedIds);
         return updatedSelectedIds;
       } else {
-        // Otherwise, add it to the array
         const updatedSelectedIds = [...currentSelectedIds, id];
         console.log("selectedCryptoIds after addition:", updatedSelectedIds);
         return updatedSelectedIds;
@@ -88,32 +86,30 @@ function Home() {
   //const location = useLocation();
   return (
     <div className={styles.homepage_container}>
-      
-      <div className={styles.right_side_container}><h1>Hello and Welcome to Crypto Mart</h1></div>
-      <div className={styles.left_side_container}>
-      <div lassName={styles.left_side_top}>
-        <CryptoPriceChart />
-      </div>
-      <div className={styles.left_side_bottom}>
-        <div className="crypto_Id_List">
-          <h2>Select Your Favorite Cryptocurrencies</h2>
-          {cryptoIds.map((id) => (
-            <div key={id}>
-              <input
-                type="checkbox"
-                value={id}
-                onChange={() => handleCheckboxChange(id)}
-                checked={selectedCryptoIds.includes(id)} // Mark checkbox as checked if id is in selectedCryptoIds
-              />{" "}
-              {id}
-            </div>
-          ))}
-          <button onClick={handleSubmit}>{tittle} Favorites List</button>
+      <div className={styles.left_side_bottom} >
+        <div lassName={styles.left_side_top}>
+          <CryptoPriceChart />
         </div>
       </div>
+      <div className={styles.right_side_container}>
+        <div className={styles.left_side_container}>
+          <div className="crypto_Id_List">
+            <h2>Select Your Favorite <br/>Cryptocurrencies...</h2>
+            {cryptoIds.map((id) => (
+              <div key={id}>
+                <input
+                  type="checkbox"
+                  value={id}
+                  onChange={() => handleCheckboxChange(id)}
+                  checked={selectedCryptoIds.includes(id)} 
+                />{" "}
+                {id}
+              </div>
+            ))}
+            <button onClick={handleSubmit} className={styles.white_btn}>{tittle} Favorites List</button>
+          </div>
+        </div>
       </div>
-      
-      
     </div>
   );
 }

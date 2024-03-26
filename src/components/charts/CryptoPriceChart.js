@@ -29,7 +29,7 @@ function CryptoPriceTable() {
 
   return (
     <div>
-      <h2>Cryptocurrency Prices</h2>
+      <h2>Curent Price</h2>
       {cryptoPrices.length > 0 ? (
         <table>
           <thead>
