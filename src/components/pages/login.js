@@ -31,8 +31,10 @@ function Login() {
         setLoginError(response.data.message);
       } else if (response.status === 200) {
         // success
-        console.log("Login successful", response.data);
-        localStorage.setItem('token', response.data.token);
+        //console.log("Login successful", response.data);
+        localStorage.setItem("UserId", response.data.loginuser._id);
+        localStorage.setItem("token", response.data.token);
+        
         clear();
         navigate("/home");
       } else {
