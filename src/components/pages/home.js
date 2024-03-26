@@ -1,66 +1,85 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import CryptoPriceChart from "../charts/CryptoPriceChart";
+import styles from "../styles/home.module.css";
 
 function Home() {
   //local states
   const [cryptoIds, setCryptoIds] = useState([]);
   const [selectedCryptoIds, setSelectedCryptoIds] = useState([]);
-
-  const userId="66010bd5c82404eac4ca300f"
+  const [tittle, setTittle] = useState("Create");
 
   const navigate = useNavigate();
+  const userId = localStorage.getItem("UserId");
+
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     getCryptoIds();
+    getUserFavlist();
+    //console.log("selectedCryptoIds>>>>>>>>>>>", selectedCryptoIds);
   }, []);
 
+  //this function call call for API to get all the Cryptocurencies in the database
   const getCryptoIds = async () => {
     console.log("getCryptoIds,,,,,,,,,,,");
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/crypto/unique-ids"
+        "http://localhost:8080/api/crypto/unique-ids",
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setCryptoIds(response.data.data || []);
-      console.log("cryptoIds......", response.data);
     } catch (error) {
       console.log("Error", error);
     }
   };
 
+  //fetch data about user favorite crypto
   const getUserFavlist = async () => {
+    console.log("function getUserFavlist called....", userId);
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/user/favorites/${userId}`
+        `http://localhost:8080/api/user/favorites/${userId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setSelectedCryptoIds(response.data.data || []);
+      //console.log("setSelectedCryptoIds", response.data.data);
+      setTittle("Update");
+      // setnewSelectionCrypt(selectedCryptoIds.slice())
     } catch (error) {
       console.error("Error fetching user favorites:", error);
     }
   };
 
-  //this function handels the checkbox changes
   const handleCheckboxChange = (id) => {
-    // Check if the id is already selected
-    if (selectedCryptoIds.includes(id)) {
-      // If it is, remove it from the array
-      setSelectedCryptoIds(
-        selectedCryptoIds.filter((cryptoId) => cryptoId !== id)
-      );
-    } else {
-      // Otherwise, add it to the array
-      setSelectedCryptoIds([...selectedCryptoIds, id]);
-    }
+    console.log("checkbox selected", id);
+    setSelectedCryptoIds((currentSelectedIds) => {
+      if (currentSelectedIds.includes(id)) {
+        // If it is already selected, remove it from the array
+        const updatedSelectedIds = currentSelectedIds.filter(
+          (cryptoId) => cryptoId !== id
+        );
+        console.log("selectedCryptoIds after removal:", updatedSelectedIds);
+        return updatedSelectedIds;
+      } else {
+        // Otherwise, add it to the array
+        const updatedSelectedIds = [...currentSelectedIds, id];
+        console.log("selectedCryptoIds after addition:", updatedSelectedIds);
+        return updatedSelectedIds;
+      }
+    });
   };
 
-  //this function handels the submit button
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8080/api/user/favorites", {
-        userId: "",
-        cryptoIds: selectedCryptoIds,
-      });
+      await axios.post(
+        "http://localhost:8080/api/user/all-in-one/favorites",
+        { userId, cryptoIds: selectedCryptoIds },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       alert("Favorites saved successfully!");
+      getUserFavlist();
     } catch (error) {
       console.log("Error", error);
       alert("Failed to execute the Save function");
@@ -68,23 +87,33 @@ function Home() {
   };
   //const location = useLocation();
   return (
-    <div className="homepage">
-      <h1>Hello and Welcome to Crypto Mart</h1>
-      <div className="crypto_Id_List">
-        <h2>Select Your Favorite Cryptocurrencies</h2>
-        {cryptoIds.map((id) => (
-          <div key={id}>
-            <input
-              type="checkbox"
-              value={id}
-              onChange={() => handleCheckboxChange(id)}
-              checked={selectedCryptoIds.includes(id)} // Mark checkbox as checked if id is in selectedCryptoIds
-            />{" "}
-            {id}
-          </div>
-        ))}
-        <button onClick={handleSubmit}>Save Favorites</button>
+    <div className={styles.homepage_container}>
+      
+      <div className={styles.right_side_container}><h1>Hello and Welcome to Crypto Mart</h1></div>
+      <div className={styles.left_side_container}>
+      <div lassName={styles.left_side_top}>
+        <CryptoPriceChart />
       </div>
+      <div className={styles.left_side_bottom}>
+        <div className="crypto_Id_List">
+          <h2>Select Your Favorite Cryptocurrencies</h2>
+          {cryptoIds.map((id) => (
+            <div key={id}>
+              <input
+                type="checkbox"
+                value={id}
+                onChange={() => handleCheckboxChange(id)}
+                checked={selectedCryptoIds.includes(id)} // Mark checkbox as checked if id is in selectedCryptoIds
+              />{" "}
+              {id}
+            </div>
+          ))}
+          <button onClick={handleSubmit}>{tittle} Favorites List</button>
+        </div>
+      </div>
+      </div>
+      
+      
     </div>
   );
 }
