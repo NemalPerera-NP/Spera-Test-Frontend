@@ -7,13 +7,15 @@ function Home() {
   const [cryptoIds, setCryptoIds] = useState([]);
   const [selectedCryptoIds, setSelectedCryptoIds] = useState([]);
 
+  const userId="66010bd5c82404eac4ca300f"
+
   const navigate = useNavigate();
 
   useEffect(() => {
     getCryptoIds();
   }, []);
 
-  const getCryptoIds = async()=> {
+  const getCryptoIds = async () => {
     console.log("getCryptoIds,,,,,,,,,,,");
     try {
       const response = await axios.get(
@@ -24,18 +26,27 @@ function Home() {
     } catch (error) {
       console.log("Error", error);
     }
-  }
+  };
 
-  const getUserFavlist =async()=>{
-
-  }
+  const getUserFavlist = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/user/favorites/${userId}`
+      );
+      setSelectedCryptoIds(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching user favorites:", error);
+    }
+  };
 
   //this function handels the checkbox changes
   const handleCheckboxChange = (id) => {
     // Check if the id is already selected
     if (selectedCryptoIds.includes(id)) {
       // If it is, remove it from the array
-      setSelectedCryptoIds(selectedCryptoIds.filter((cryptoId) => cryptoId !== id));
+      setSelectedCryptoIds(
+        selectedCryptoIds.filter((cryptoId) => cryptoId !== id)
+      );
     } else {
       // Otherwise, add it to the array
       setSelectedCryptoIds([...selectedCryptoIds, id]);
@@ -45,14 +56,14 @@ function Home() {
   //this function handels the submit button
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8080/api/user/favorites", { 
-        userId:"",
-      cryptoIds:selectedCryptoIds });
+      await axios.post("http://localhost:8080/api/user/favorites", {
+        userId: "",
+        cryptoIds: selectedCryptoIds,
+      });
       alert("Favorites saved successfully!");
     } catch (error) {
       console.log("Error", error);
       alert("Failed to execute the Save function");
-      
     }
   };
   //const location = useLocation();

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import styles from "../styles/login.module.css";
 
 const Login_url = "http://localhost:8080/api/auth/login";
 
@@ -27,17 +28,18 @@ function Login() {
         // unauthorized
         console.log("Unauthorized:", response.data.message);
         clear();
-        alert(response.data.message);
+        setLoginError(response.data.message);
       } else if (response.status === 200) {
         // success
         console.log("Login successful", response.data);
+        localStorage.setItem('token', response.data.token);
         clear();
         navigate("/home");
       } else {
         // other statuses
         console.log("Other status:", response.data.message);
         clear();
-        alert(response.data.message);
+        setLoginError(response.data.message);
       }
     } catch (error) {
       if (error.response) {
@@ -49,11 +51,11 @@ function Login() {
         // Handling based on status
         if (error.response.status === 401) {
           // unauthorized error
-          alert(`Login failed: ${error.response.data.message}`);
+          setLoginError(`Login failed: ${error.response.data.message}`);
           clear();
         } else {
           // other errors
-          alert("An error occurred. Please try again later.");
+          setLoginError("An error occurred. Please try again later.");
           clear();
         }
       } else if (error.request) {
@@ -74,37 +76,44 @@ function Login() {
   }
 
   return (
-    <div className="Login_Container">
-      <h1>Login Page</h1>
-
-      <form onSubmit={submit}>
-        <div className="form-group">
-          <input
-            type="text"
-            id="username"
-            placeholder="UserName"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className={styles.login_container}>
+      <div className={styles.login_form_container}>
+        <div className={styles.left}>
+          <form className={styles.form_container} onSubmit={submit}>
+            <h1>Login to Your Account</h1>
+            <input
+              type="text"
+              id="username"
+              placeholder="UserName"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className={styles.input}
+            />
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className={styles.input}
+            />
+            {loginError && <div className={styles.error_msg}>{loginError}</div>}
+            <button type="submit" className={styles.green_btn}>
+              Login In
+            </button>
+          </form>
         </div>
-        <div className="form-group">
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <br />
-          <input type="submit" value="Login" />
+        <div className={styles.right}>
+          <h1>New Here ?</h1>
+          <Link to="/signup">
+            <button type="button" className={styles.white_btn}>
+              Sing Up
+            </button>
+          </Link>
         </div>
-      </form>
-      <br />
-      <p>OR</p>
-      <br />
-      <Link to="/signup">Signup Page</Link>
+      </div>
     </div>
   );
 }

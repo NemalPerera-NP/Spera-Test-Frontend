@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import styles from "../styles/signup.css";
+import styles from "../styles/signup.module.css";
 
 const Login_url = "http://localhost:8080/api/auth/signup";
 
@@ -90,10 +90,18 @@ function Signup() {
   }
 
   return (
-    <div className="Login_Container">
-      <h1>Signup Page</h1>
-
-      <form onSubmit={submitSignup}>
+    <div className={styles.signup_container}>
+      <div className={styles.signup_form_container}>
+      <div className={styles.left}>
+      <h1>Welcome</h1>
+					<Link to="/">
+						<button type="button" className={styles.white_btn}>
+							Login in
+						</button>
+					</Link>
+      </div>
+      <div className={styles.right}>
+      <form  className={styles.form_container} onSubmit={submitSignup}>
         <input
           type="text"
           id="firstname"
@@ -101,7 +109,7 @@ function Signup() {
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
         <input
           type="text"
@@ -110,7 +118,7 @@ function Signup() {
           value={lastname}
           onChange={(e) => setLastname(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
         <input
           type="text"
@@ -119,7 +127,7 @@ function Signup() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
         <input
           type="email"
@@ -128,7 +136,7 @@ function Signup() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
         <input
           type="password"
@@ -137,7 +145,7 @@ function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
         <input
           type="password"
@@ -146,19 +154,17 @@ function Signup() {
           value={confirmpassword}
           onChange={(e) => setConfirmpassword(e.target.value)}
           required
-          // className={styles.input}
+          className={styles.input}
         />
 
         {signupError && <div className={styles.error_msg}>{signupError}</div>}
         <button type="submit" className={styles.green_btn}>
           Sing Up
         </button>
-        {/* //<input type="submit" onClick={submit} /> */}
       </form>
-      <br />
-      <p>OR</p>
-      <br />
-      <Link to="/login">Login Page</Link>
+
+      </div>
+      </div>
     </div>
   );
 }
