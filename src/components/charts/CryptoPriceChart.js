@@ -9,23 +9,25 @@ function CryptoPriceTable() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    const fetchCryptoPrices = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/crypto/latest-prices",
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log("console.log(response.data)", response.data.data);
+        setCryptoPrices(response.data); // API returns an array of { cryptoId: string, price: number }
+      } catch (error) {
+        console.error("Failed to fetch crypto prices:", error);
+      }
+    };
     fetchCryptoPrices();
-  }, []);
 
- 
+    //to call fetchCryptoPrices every 1 minute
+    const intervalId = setInterval(fetchCryptoPrices, 180000); // 60000 ms = 1 minute
 
-  const fetchCryptoPrices = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8080/api/crypto/latest-prices",
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log("console.log(response.data)", response.data.data);
-      setCryptoPrices(response.data); // Assuming your API returns an array of objects with cryptoId and price
-    } catch (error) {
-      console.error("Failed to fetch crypto prices:", error);
-    }
-  };
+    return () => clearInterval(intervalId);
+  }, [token]); // Re-run the effect if the token changes
 
   return (
     <div>
